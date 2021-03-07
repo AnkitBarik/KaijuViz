@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -77,7 +77,7 @@ remixFile = 'msphere.mix.h5'
 nsteps,sIds=kaiH5.cntSteps(remixFile)
 T=kaiH5.getTs(remixFile,sIds,aID='MJD')
 
-print("nsteps=",nsteps)
+print(("nsteps=",nsteps))
 
 t = Time(T, format='mjd').iso
 
