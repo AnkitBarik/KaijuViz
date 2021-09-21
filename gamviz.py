@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 
-cartMap = False
+cartMap = True
 
 hf = h5py.File('msphere.gam.h5','r')
 
