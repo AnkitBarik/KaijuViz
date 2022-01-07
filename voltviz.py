@@ -79,26 +79,48 @@ field = 'psi'
 removeShell = False
 
 cut = 0.5
+step = nsteps - 100
 
-for step in [nsteps-1]:
-    dat = np.array(hf['Step#'+str(step)+'/'+field])
+dat = np.array(hf['Step#'+str(step)+'/'+field])
 
-    datMax = (np.abs(dat)).max()
+radLevel = 1
 
-    fig = plt.figure(figsize=(12,12))
-    ax = fig.add_subplot(projection='3d')
-    if removeShell:
-        x   = x[...,:-1]
-        y   = y[...,:-1]
-        z   = z[...,:-1]
-        dat = dat[...,:-1]
-    sc = ax.scatter(x,y,z,dat,c=dat,s=1e2*np.abs(dat),cmap=cmap,vmin=-cut*datMax,vmax=cut*datMax)
-    plt.colorbar(sc,fraction=0.06, pad=0.04,orientation='horizontal')
-    ax.set_xlabel(r'$x$',fontsize=30)
-    ax.set_ylabel(r'$y$',fontsize=30)
-    ax.set_zlabel(r'$z$',fontsize=30)
-    plt.tick_params(labelsize=20)
-    ax.set_title(r'$\psi$',fontsize=30)
+x   = x[...,radLevel]
+y   = y[...,radLevel]
+z   = z[...,radLevel]
+dat = dat[...,radLevel]
 
-plt.tight_layout()
-plt.show()
+# for step in [nsteps-1]:
+#     dat = np.array(hf['Step#'+str(step)+'/'+field])
+
+#     datMax = (np.abs(dat)).max()
+
+#     fig = plt.figure(figsize=(12,12))
+#     ax = fig.add_subplot(projection='3d')
+#     if removeShell:
+#         x   = x[...,:-1]
+#         y   = y[...,:-1]
+#         z   = z[...,:-1]
+#         dat = dat[...,:-1]
+#     sc = ax.scatter(x,y,z,dat,c=dat,s=1e2*np.abs(dat),cmap=cmap,vmin=-cut*datMax,vmax=cut*datMax)
+#     plt.colorbar(sc,fraction=0.06, pad=0.04,orientation='horizontal')
+#     ax.set_xlabel(r'$x$',fontsize=30)
+#     ax.set_ylabel(r'$y$',fontsize=30)
+#     ax.set_zlabel(r'$z$',fontsize=30)
+#     plt.tick_params(labelsize=20)
+#     ax.set_title(r'$\psi$',fontsize=30)
+
+# plt.tight_layout()
+# plt.show()
+
+from mayavi import mlab
+
+lut=eval('plt.cm.'+cmap+'(np.linspace(0,1,255))*255')
+
+mlab.figure(size=(800, 800))
+mesh_handle = mlab.mesh(x,y,z, scalars=dat)
+mesh_handle.module_manager.scalar_lut_manager.lut.table = lut
+#    mesh_handle.module_manager.scalar_lut_manager.reverse_lut = True
+mlab.title('psi')
+mlab.draw()
+mlab.show()
